@@ -1,0 +1,7 @@
+https://datascience.stackexchange.com/questions/51890/how-to-use-simpleimputer-class-to-replace-missing-values-with-mean-values-using
+https://stackoverflow.com/questions/59476165/typeerror-init-got-an-unexpected-keyword-argument-categorical-features
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+# Country column
+ct = ColumnTransformer([("Country", OneHotEncoder(), [1])], remainder = 'passthrough')
+X = ct.fit_transform(X)
