@@ -104,7 +104,7 @@ regressor.fit(X_train, y_train)
 y_pred = regressor.predict(X_test)
 
 #predict other values taht are not in the test set
-regressor.predict([[15]])
+regressor.predict([[15]]
 
 
 #plot the results
