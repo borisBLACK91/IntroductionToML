@@ -1,0 +1,4 @@
+Simple Linear regression: 
+y = b0 + b1*x
+we express our depended variable as linear expression of the independent var
+

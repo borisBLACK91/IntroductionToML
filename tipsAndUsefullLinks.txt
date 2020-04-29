@@ -5,3 +5,6 @@ from sklearn.compose import ColumnTransformer
 # Country column
 ct = ColumnTransformer([("Country", OneHotEncoder(), [1])], remainder = 'passthrough')
 X = ct.fit_transform(X)
+
+https://stackoverflow.com/questions/50090767/single-prediction-with-linear-regression
+NB: regressor.predict([[a_single_value]]) to predict a signle value
