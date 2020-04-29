@@ -6,7 +6,7 @@ Created on Mon Apr 27 21:29:15 2020
 @author: boris
 """
 
-#Data Preprocessing
+#1-Data Preprocessing
 
 #inport the needed libraries
 import numpy as np #to make mathematics computations
@@ -21,7 +21,7 @@ dataset  = pd.read_csv("Data.csv")
 #create the matrix of the indepedant variables
 X = dataset.iloc[:,:-1].values #do not  take the last column
 #create the matrix of the depedant variable we want to predict
-Y = dataset.iloc[:,-1].values 
+y = dataset.iloc[:,-1].values 
 
 
 #manage missing data
@@ -57,6 +57,34 @@ from sklearn.compose import ColumnTransformer
 columnTransformer = ColumnTransformer([("Country", OneHotEncoder(), [0])], remainder ="passthrough")
 #then we transform X with the values transformed
 X = columnTransformer.fit_transform(X)
-
 labelEncoder_y = LabelEncoder()
-Y = labelEncoder_y.fit_transform(Y)
+y = labelEncoder_y.fit_transform(y)
+
+
+#divide the dataset between training set and test set 
+from  sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+"""
+So we build the ML model based on the training set (X_train, y_train) ans then 
+we estimate the model precision using the test set (X_test , y_test)
+"""
+
+#Feature scaling 
+"""putting all variables on the same scale , 
+to avoid huge values variable to crush small values varibales and compromise
+our model
+""" 
+from sklearn.preprocessing import StandardScaler
+"""
+how does the scaling works : 2 main formukas 
+-standardisation: 
+    Xstand = [X - mean(X)]/standardDeviation(X)
+or
+-normalisation 
+    Xnorm = [X - min(X)]/[max(X) - min(X)]   
+"""
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+
