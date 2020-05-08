@@ -65,7 +65,6 @@ we estimate the model precision using the test set (X_test , y_test)
 
 #Feature scaling 
 #no need of feature scaling in Multiple Linear regression as the coefs of each var could adapt the the scales
-  
 """putting all variables on the same scale , 
 to avoid huge values variable to crush small values varibales and compromise
 our model
@@ -84,3 +83,19 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 """
 
+
+#building the Multiple Linear Regression model (MLR Model)
+from sklearn.linear_model import  LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+#make new predictions using the regressor
+#first using the test set X_test
+y_pred = regressor.predict(X_test)
+
+#predict other values taht are not in the test set
+#regressor.predict([[15]])
+"""below the prediction of the profit of a startup in Newyork (1, 0 as for the categorical
+variable transformation), with RD Spend = 130000, Admin = 140000, Marketing = 300000
+"""
+regressor.predict(np.array([[1, 0, 130000, 140000, 300000]]))
