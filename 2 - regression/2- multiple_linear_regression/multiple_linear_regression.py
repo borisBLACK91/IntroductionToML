@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
 """
-Created on Mon Apr 29 21:35:15 2020
+Created on Fri May  8 19:15:56 2020
 
 @author: boris
 """
+
 
 #1-Data Preprocessing
 
@@ -15,8 +15,7 @@ import pandas as pd #to import and manage datasets
 
 
 #import the dataset
-dataset  = pd.read_csv("Salary_Data.csv")
-
+dataset  = pd.read_csv("50_Startups.csv")
 
 #create the matrix of the indepedant variables
 X = dataset.iloc[:,:-1].values #do not  take the last column
@@ -25,8 +24,9 @@ y = dataset.iloc[:,-1].values
 
 
 #manage missing data
+"""
+NON MISSING DATA IN THIS DATA SET
 #import the SimpleImputer class 
-""" commmented as we dont have null values
 from sklearn.impute import SimpleImputer
 #instantiate an imputer object that will repalkce missing values
 imputer = SimpleImputer(missing_values = np.nan , strategy = "mean")
@@ -38,46 +38,38 @@ X[:, 1:3] = imputer.transform(X[:, 1:3]) # 1:3 means coluns index : 1, 2
 
 
 #manage categorical variables
-"""
-we need to encode categorical variables into numerical values 
-to be able to use them inside mathematical equations. 
-So in our dataset we need to do that for the
-independant variable Country and the dependant 
-variable Purchased 
--> we need to know if those cathegorical variable are 
-nominal 
-or 
-ordinal
-with dummy variable (onehot) (a new column for each values) when there no notion of orders -> country. 
-for the var Purchased we will use 0 for no and 1 for yes. We can do this because it is the dependant var
-"""
-""" commented as we dont have categorical vars
+#the state (index = 3) is a categorical variable 
+
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 #we first transfrom countries values to num values
-columnTransformer = ColumnTransformer([("Country", OneHotEncoder(), [0])], remainder ="passthrough")
+columnTransformer = ColumnTransformer([("Country", OneHotEncoder(), [3])], remainder ="passthrough")
 #then we transform X with the values transformed
 X = columnTransformer.fit_transform(X)
-labelEncoder_y = LabelEncoder()
-y = labelEncoder_y.fit_transform(y)
-"""
+#as th dependent variable (the startups profit) is not a categorical var we dont need the label encoder
+#labelEncoder_y = LabelEncoder()
+#y = labelEncoder_y.fit_transform(y)
+
+
+#let's remove one dummy variables to keep independence of variable property 
+X = X[:, 1:]
+
 
 #divide the dataset between training set and test set 
 from  sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1.0/3, 
-                                            random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 """
 So we build the ML model based on the training set (X_train, y_train) ans then 
 we estimate the model precision using the test set (X_test , y_test)
 """
 
 #Feature scaling 
+#no need of feature scaling in Multiple Linear regression as the coefs of each var could adapt the the scales
+  
 """putting all variables on the same scale , 
 to avoid huge values variable to crush small values varibales and compromise
 our model
-"""
-
-#not need as we have a simple linear model  in this case 
+""" 
 #from sklearn.preprocessing import StandardScaler
 """
 how does the scaling works : 2 main formukas 
@@ -87,30 +79,8 @@ or
 -normalisation 
     Xnorm = [X - min(X)]/[max(X) - min(X)]   
 """
-"""
-sc = StandardScaler()
+"""sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 """
 
-
-#building the Simple Linear Regression model (SLM)
-from sklearn.linear_model import  LinearRegression
-regressor = LinearRegression()
-regressor.fit(X_train, y_train)
-
-#make new predictions using the regressor
-#first using the test set X_test
-y_pred = regressor.predict(X_test)
-
-#predict other values taht are not in the test set
-regressor.predict([[15]])
-
-
-#plot the results
-plt.scatter(X_test, y_test, color = "red")
-plt.plot(X_train, regressor.predict(X_train), color = "blue")
-plt.title("Salary vs Experience")
-plt.xlabel("Experience")
-plt.ylabel("Salary")
-plt.show()
