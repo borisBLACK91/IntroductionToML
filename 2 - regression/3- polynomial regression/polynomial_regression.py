@@ -63,10 +63,13 @@ y = labelEncoder_y.fit_transform(y)
 
 
 
-#building the Simple Linear Regression model (SLM)
+#building the polynomial model
 from sklearn.linear_model import  LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+poly_reg = PolynomialFeatures(degree = 4)
+X_poly = poly_reg.fit_transform(X)
 regressor = LinearRegression()
-regressor.fit(X, y)
+regressor.fit(X_poly, y)
 
 #make new predictions using the regressor
 #first using the test set X_test
@@ -78,7 +81,7 @@ regressor.predict([[15]])
 
 #plot the results
 plt.scatter(X, y, color = "red")
-plt.plot(X, regressor.predict(X), color = "blue")
+plt.plot(X, regressor.predict(X_poly), color = "blue")
 plt.title("Salary vs Experience")
 plt.xlabel("Experience")
 plt.ylabel("Salary")
