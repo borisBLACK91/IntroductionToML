@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon May 18 22:48:26 2020
+Created on Thu May 28 21:55:47 2020
 
 @author: boris
 """
 
 
 #3-classification: 
-#1- logistic regression
+#2- svm : Support Vector Margin
+"""
+model based on the support vector of each category. 
+A support vector is a point of one category wich the nearest of the other category, 
+meaning the point that could easily be confused as a point of the other category! 
+So the 2 points of the 2 category matching that conditons are the support vectors.
+"""
 
 #inport the needed libraries
 import numpy as np #to make mathematics computations
@@ -53,8 +59,8 @@ X_test = sc.transform(X_test)
 
 
 #♣building the logictic regression model
-from sklearn.linear_model import LogisticRegression
-classifier = LogisticRegression(random_state = 0)
+from sklearn.svm import SVC
+classifier = SVC(kernel = 'linear', random_state = 0)
 classifier.fit(X_train, y_train)
 
 #making prediction with our model
@@ -70,7 +76,7 @@ cm = confusion_matrix(y_test, y_pred)
 
 #visualize results
 from matplotlib.colors import ListedColormap 
-X_set, y_set = X_test, y_test
+X_set, y_set = X_train, y_train
 X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
                      np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))                              
 plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape), 
@@ -85,6 +91,8 @@ plt.xlabel('Age')
 plt.ylabel('Salaire Estimé')
 plt.legend()
 plt.show()
+
+
 
 
 
